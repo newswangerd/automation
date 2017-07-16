@@ -1,6 +1,11 @@
 [vpn]
 davidn.io ansible_user=root
 
-pi-initial ansible_host=192.168.1.21 ansible_user=pi
+[pi-initial]
+pi-initial ansible_host=192.168.1.21 ansible_user=pi ansible_become_pass=raspberry
+
+[pi-dynamic]
 pi-dynamic ansible_host=192.168.1.21 ansible_user=david
+
+[pi]
 pi-vpn ansible_host=192.168.255.100 ansible_user=david

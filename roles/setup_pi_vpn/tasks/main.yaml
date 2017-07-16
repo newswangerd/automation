@@ -28,13 +28,11 @@
   template:
     src: ../templates/ovpn.conf
     dest: /etc/supervisor/conf.d/ovpn.conf
-  register: results
 
 - name: reload supervisord
   service:
     name: supervisor
-    state: started
-  when: results.changed
+    state: restarted
 
 - name: start ovpn
   supervisorctl:
