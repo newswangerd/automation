@@ -1,0 +1,4 @@
+---
+- hosts: pi
+  roles:
+    - setup_users

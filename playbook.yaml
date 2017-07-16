@@ -1,0 +1,6 @@
+---
+- hosts: vpn
+  roles:
+    - setup_ovpn_server
+    # - add_vpn_client
+    - revoke_vpn_client

@@ -1,0 +1,28 @@
+- name: Make sure we have a 'wheel' group
+  group:
+    name: wheel
+    state: present
+
+- name: Allow 'wheel' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+
+- name: add user for me
+  user:
+    name: david
+    append: yes
+    group: wheel
+
+- name: install my ssh keys from github
+  authorized_key:
+    user: david
+    key: https://github.com/newswangerd.keys
+
+- name: remove the default user from the system
+  user:
+    name: pi
+    state: absent
+    force: yes

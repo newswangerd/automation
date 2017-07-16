@@ -1,0 +1,110 @@
+- name: Ensure required variables are defined
+  fail: msg="{{ item }} value missing and is required"
+  when: "item is not defined"
+  with_items:
+    - client_name
+    - pki_password
+    - ovpn_data
+    - ovpn_host
+
+- name: install pip
+  package:
+    name: python-pip
+    state: present
+
+- name: ensure docker py is installed
+  pip:
+    name: docker-py
+    state: present
+
+- name: pull open vpn image
+  docker_image:
+    name: kylemanna/openvpn
+    pull: true
+
+# TODO: update this with auto_remove when 2.4 is released
+- name: set up configuration for ovpn container
+  command: docker run -v {{ ovpn_data }}:/etc/openvpn --rm kylemanna/openvpn ovpn_genconfig -u udp://v.davidn.io
+  args:
+    creates: "{{ ovpn_data }}"
+
+- name: copy a script into the docker container which allows executing easyrsa without tty
+  template:
+    src: ../templates/auto_key.sh
+    dest: "{{ ovpn_data }}/auto_key.sh"
+    mode: 555
+
+# easy_rsa needs interactive propmts which can't be done using docker/ansible commands
+- name: add with_pass.sh
+  template:
+    src: ../templates/with_pass.sh
+    dest: "{{ ovpn_data }}/with_pass.sh"
+    mode: 555
+
+- name: add with_yes.sh
+  template:
+    src: ../templates/with_yes.sh
+    dest: "{{ ovpn_data }}/with_yes.sh"
+    mode: 555
+
+- name: create keys
+  shell: docker run -e PKI_PASS='{{ pki_password }}' -e PKI_HOST='{{ ovpn_host }}' -v {{ ovpn_data }}:/etc/openvpn --rm kylemanna/openvpn /etc/openvpn/auto_key.sh
+  args:
+    creates: "{{ ovpn_data }}/pki"
+  no_log: true
+
+- name: start ovpn container
+  docker_container:
+    name: ovpn
+    image: kylemanna/openvpn
+    volumes:
+      - "{{ ovpn_data }}:/etc/openvpn"
+    ports:
+      - "1194:1194/udp"
+    capabilities:
+      - "NET_ADMIN"
+
+- name: create directory for storing client configs
+  file:
+    path: "{{ ovpn_data }}client_confs"
+    state: directory
+
+# docker run -v $OVPN_DATA:/etc/openvpn -d -p 1194:1194/udp --cap-add=NET_ADMIN kylemanna/openvpn
+
+
+# password password host password
+
+
+# - name: generate ovpn configs
+#   docker_container:
+#     name: ovpn_setup
+#     # auto_remove: yes
+#     image: kylemanna/openvpn
+#     command: ovpn_genconfig -u udp://{{ ovpn_host }}
+#     volumes:
+#       - "{{ ovpn_data }}:/etc/openvpn"
+#
+# - name: remove image
+#   docker_container:
+#     name: ovpn_setup
+#     state: absent
+#
+# - name: generate keys
+#   docker_container:
+#     name: ovpn_setup
+#     # auto_remove: yes
+#     image: kylemanna/openvpn
+#     command: "ovpn_initpki <<< $'pass\npass\nhost\npass\n'"
+#     volumes:
+#       - "{{ ovpn_data }}:/etc/openvpn"
+#   register: result
+#
+# - debug: var=result
+
+# - name: remove image
+#   docker_container:
+#     name: ovpn_setup
+#     state: absent
+
+#  docker run -v $OVPN_DATA:/etc/openvpn --rm kylemanna/openvpn ovpn_genconfig -u udp://VPN.SERVERNAME.COM
+#  docker run -v $OVPN_DATA:/etc/openvpn --rm -it kylemanna/openvpn ovpn_initpki
