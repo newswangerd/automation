@@ -1,0 +1,32 @@
+---
+# deletes original raspberry pi user and sets up new one
+- hosts: pi-initial
+  become: true
+  become_user: root
+  roles:
+    - setup_users
+
+# get vpn configs
+- hosts: vpn
+  vars_files:
+    - vaulted_vars/vpn.yaml
+  vars:
+    ip: 192.168.255.100
+    client: pi-1
+  roles:
+    - setup_ovpn_server
+    - add_vpn_client
+
+# sets up vpn on pi
+- hosts: pi-dynamic
+  vars:
+    ovpn_config_path: ovpn_configs/pi-1.ovpn
+    dest_config_path: /etc/ovpn/
+    config_name: pi-1.ovpn
+  become: true
+  become_user: root
+  roles:
+    - setup_pi_vpn
+
+# set up pihole
+- hosts: pi-vpn

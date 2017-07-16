@@ -1,0 +1,42 @@
+---
+- name: install ovpn
+  package:
+    name: openvpn
+    state: present
+
+- name: create directory for storing ovpn configs
+  file:
+    path: "{{ dest_config_path }}"
+    state: directory
+
+- name: upload ovpn config
+  template:
+    src: "{{ ovpn_config_path }}"
+    dest: "{{ dest_config_path }}/{{ config_name }}"
+
+- name: install supervisord
+  package:
+    name: supervisor
+    state: present
+
+- name: start supervisord
+  service:
+    name: supervisor
+    state: started
+
+- name: upload ovpn supervisord config
+  template:
+    src: ../templates/ovpn.conf
+    dest: /etc/supervisor/conf.d/ovpn.conf
+  register: results
+
+- name: reload supervisord
+  service:
+    name: supervisor
+    state: started
+  when: results.changed
+
+- name: start ovpn
+  supervisorctl:
+    name: ovpn
+    state: started

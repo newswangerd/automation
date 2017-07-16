@@ -1,6 +1,7 @@
 ---
 - hosts: vpn
+  vars_files:
+    - vaulted_vars/vpn.yaml
   roles:
     - setup_ovpn_server
     - add_vpn_client
-    # - revoke_vpn_client
