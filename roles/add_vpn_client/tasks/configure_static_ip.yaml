@@ -1,4 +1,5 @@
 ---
+# note: must be 192.168.255.x
 - name: add ip file
   template:
     src: ../templates/ip

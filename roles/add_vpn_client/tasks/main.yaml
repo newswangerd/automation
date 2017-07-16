@@ -1,7 +1,7 @@
 ---
 - name: Ensure required variables are defined
   fail: msg="{{ item }} value missing and is required"
-  when: "item is not defined"
+  when: "{{ item }} is not defined"
   with_items:
     - client
     - pki_password
