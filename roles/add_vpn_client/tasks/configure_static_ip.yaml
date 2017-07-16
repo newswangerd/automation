@@ -1,0 +1,5 @@
+---
+- name: add ip file
+  template:
+    src: ../templates/ip
+    dest: "{{ ovpn_data }}/ccd/{{ client }}"

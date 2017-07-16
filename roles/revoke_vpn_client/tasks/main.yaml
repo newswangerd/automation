@@ -3,7 +3,7 @@
   fail: msg="{{ item }} value missing and is required"
   when: "item is not defined"
   with_items:
-    - client_name
+    - client
     - pki_password
     - ovpn_data
 
@@ -14,7 +14,7 @@
     -e PKI_PASS='{{ pki_password }}' \
     -v {{ ovpn_data }}:/etc/openvpn \
     --rm kylemanna/openvpn \
-    /etc/openvpn/with_yes.sh easyrsa revoke {{ client_name }}
+    /etc/openvpn/with_yes.sh easyrsa revoke {{ client }}
   no_log: true
 
 # - name: remove ovpn config and keys
@@ -22,6 +22,6 @@
 #     path: "{{ item }}"
 #     state: absent
 #   with_items:
-#     - "{{ ovpn_data }}client_confs/{{ client_name }}.ovpn"
-#     - "{{ ovpn_data }}pki/private/{{ client_name }}.key"
-#     - "{{ ovpn_data }}pki/issued/{{ client_name }}.crt"
+#     - "{{ ovpn_data }}client_confs/{{ client }}.ovpn"
+#     - "{{ ovpn_data }}pki/private/{{ client }}.key"
+#     - "{{ ovpn_data }}pki/issued/{{ client }}.crt"

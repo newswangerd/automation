@@ -2,7 +2,7 @@
   fail: msg="{{ item }} value missing and is required"
   when: "item is not defined"
   with_items:
-    - client_name
+    - client
     - pki_password
     - ovpn_data
     - ovpn_host
