@@ -2,10 +2,13 @@
 davidn.io ansible_user=root
 
 [pi-initial]
-pi-initial ansible_host=192.168.1.21 ansible_user=pi ansible_become_pass=raspberry
+pi-initial ansible_host=192.168.1.21 ansible_user=pi ansible_become_pass=raspberry ansible_become_user=root
 
 [pi-dynamic]
 pi-dynamic ansible_host=192.168.1.21 ansible_user=david
 
 [pi]
 pi-vpn ansible_host=192.168.255.100 ansible_user=david
+
+[mc]
+sky ansible_host=192.241.167.63 ansible_user=root

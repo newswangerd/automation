@@ -1,0 +1,40 @@
+- name: install lighttpd
+  package:
+    name: lighttpd
+    state: present
+
+- name: install php5
+  package:
+    name: php5-cgi
+    state: present
+
+# - name: enable fastcgi
+#   shell: lighty-enable-mod fastcgi
+#   args:
+#     creates: /etc/lighttpd/conf-enabled/10-fastcgi.conf
+#
+# - name: enable fastcgi-php
+#   shell: lighty-enable-mod fastcgi-php
+#   args:
+#     creates: /etc/lighttpd/conf-enabled/15-fastcgi-php.conf
+
+# - name: install config
+#   template:
+#     src: ./templates/lighttpd.conf
+#     dest: /etc/lighttpd/lighttpd.conf
+
+# - name: delete defaut index
+#   file:
+#     path: /var/www/html/index.lighttpd.html
+#     state: absent
+
+# - name: reload lighttpd
+#   service:
+#     name: lighttpd
+#     state: reloaded
+#
+# - name: download h5ai
+#   unarchive:
+#     src: https://release.larsjung.de/h5ai/h5ai-0.29.0.zip
+#     dest: /var/www/
+#     remote_src: yes

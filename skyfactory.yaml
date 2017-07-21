@@ -1,0 +1,4 @@
+---
+- hosts: mc
+  roles:
+    - minecraft_skyfactory3

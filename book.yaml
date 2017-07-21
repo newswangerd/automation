@@ -1,0 +1,5 @@
+---
+- hosts: pi-dynamic
+  become: yes
+  roles:
+    - pi_setup_h5ai

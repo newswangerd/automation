@@ -1,0 +1,65 @@
+- name: install unzip
+  package:
+    name: unzip
+    state: present
+
+- name: make directory for skyfactory
+  file:
+    path: /opt/mc/
+    state: directory
+
+- name: download sky factory
+  unarchive:
+    src: http://ftb.cursecdn.com/FTB2/modpacks/FTBPresentsSkyfactory3/3_0_13/FTBPresentsSkyfactory3Server.zip
+    dest: /opt/mc/
+    remote_src: yes
+
+- name: update eula
+  template:
+    src: ./templates/eula.txt
+    dest: /opt/mc/eula.txt
+
+- name: upload max ram settings
+  template:
+    src: ../templates/settings-local.sh
+    dest: /opt/mc/settings-local.sh
+    mode: 755
+
+- name: make ServerStart.sh executable
+  file:
+    path: /opt/mc/ServerStart.sh
+    mode: 755
+
+- name: install java
+  package:
+    name: default-jdk
+    state: present
+
+- name: make minecraft user
+  user:
+    name: minecraft
+
+- name: set owner of mc files to minecraft user
+  file:
+    path: /opt/mc
+    owner: minecraft
+    group: minecraft
+    recurse: yes
+
+- name: install supervisord
+  package:
+    name: supervisor
+    state: present
+
+- name: upload ovpn supervisord config
+  template:
+    src: ../templates/skyfactory.conf
+    dest: /etc/supervisor/conf.d/skyfactory.conf
+
+# note, in order to write to stdin on minecraft write to proc
+# ex echo stop > /proc/4536/fd/0
+#                      ^ PID of process
+- name: restart supervisord
+  service:
+    name: supervisor
+    state: restarted
