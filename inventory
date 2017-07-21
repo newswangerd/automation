@@ -11,4 +11,4 @@ pi-dynamic ansible_host=192.168.1.21 ansible_user=david
 pi-vpn ansible_host=192.168.255.100 ansible_user=david
 
 [mc]
-sky ansible_host=192.241.167.63 ansible_user=root
+sky ansible_host=138.197.109.99 ansible_user=root
