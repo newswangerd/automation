@@ -1,0 +1,25 @@
+---
+- name: install nfts drivers
+  package:
+    name: ntfs-3g
+    state: present
+
+- name: set up diretories for hard drives in www root
+  file:
+    path: "/var/www/html/{{ item }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: 444
+    recurse: true
+  with_items:
+    - main
+    - backup
+
+- name: mount main hdd
+  mount:
+    path: /var/www/html/main
+    src: UUID=5C84CA2384C9FF8E
+    fstype: ntfs-3g
+    opts: rw,uid=david,gid=david
+    state: present

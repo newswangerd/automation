@@ -2,4 +2,4 @@
 - hosts: pi-dynamic
   become: yes
   roles:
-    - pi_setup_h5ai
+    - pi_setup_fileserver
