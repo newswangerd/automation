@@ -1,0 +1,24 @@
+---
+- hosts: localhost
+  vars:
+    home: /home/david/
+    user: david
+
+  tasks:
+  - name: install git
+    apt:
+      name: git
+      state: present
+
+  - name: create code file
+    file:
+      path: "{{ home }}/code"
+      mode: 0700
+      owner: "{{ user }}"
+      group: "{{ user }}"
+      state: directory
+
+  - name: download automation repo
+    git:
+      repo: https://github.com/newswangerd/automation.git
+      dest: "{{ home }}/code/automation"

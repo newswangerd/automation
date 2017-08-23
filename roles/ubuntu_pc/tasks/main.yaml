@@ -1,0 +1,31 @@
+---
+- name: install PPAs
+  apt_repository:
+    repo: 'ppa:webupd8team/atom'
+    state: present
+  become: yes
+
+- name: install neccesary packages
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - vim
+  - atom
+  - guake
+  become: yes
+
+- name: setup git
+  template:
+    src: .gitconfig
+    dest: "{{ ansible_user_dir }}/.gitconfig"
+
+- name: remove amazon crap
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /usr/share/applications/ubuntu-amazon-default.desktop
+    - /usr/share/unity-webapps/userscripts/unity-webapps-amazon/Amazon.user.js
+    - /usr/share/unity-webapps/userscripts/unity-webapps-amazon/manifest.json
+  become: yes
