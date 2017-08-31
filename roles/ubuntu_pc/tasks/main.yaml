@@ -1,8 +1,10 @@
 ---
 - name: install PPAs
   apt_repository:
-    repo: 'ppa:webupd8team/atom'
+    repo: "{{ item }}"
     state: present
+  with_items:
+    - 'ppa:webupd8team/atom'
   become: yes
 
 - name: install neccesary packages
@@ -13,6 +15,10 @@
   - vim
   - atom
   - guake
+  - fish
+  - keepassx
+  - openvpn
+  - supervisor
   become: yes
 
 - name: setup git

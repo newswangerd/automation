@@ -1,0 +1,7 @@
+---
+# Usage: -e "client=CLIENTNAME -ask-vault-pass"
+- hosts: vpn
+  vars_files:
+    - ../vaulted_vars/vpn.yaml
+  roles:
+    - vpn_add_client
