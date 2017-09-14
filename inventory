@@ -1,11 +1,11 @@
 pi-dynamic ansible_host=192.168.1.21 ansible_user=david
 pi-vpn ansible_host=192.168.255.100 ansible_user=david
+pi-initial ansible_host=192.168.1.21 ansible_user=pi ansible_become_pass=raspberry ansible_become_user=root
+fs-local ansible_host=192.168.2.99 ansible_user=david
+fs-vpn ansible_host=192.168.255.100 ansible_user=david
 
 [vpn]
 davidn.io ansible_user=root
-
-[pi-initial]
-pi-initial ansible_host=192.168.1.21 ansible_user=pi ansible_become_pass=raspberry ansible_become_user=root
 
 [mc]
 sky.davidn.io ansible_user=root

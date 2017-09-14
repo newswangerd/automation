@@ -1,0 +1,21 @@
+# - hosts: vpn
+#   vars_files:
+#     - ../vaulted_vars/vpn.yaml
+#   vars:
+#     ip: 192.168.255.100
+#     client: satellite-fserve
+#   roles:
+#     - vpn_setup
+#     - vpn_add_client
+
+- hosts: fs-vpn
+  vars:
+    ovpn_config_path: ovpn_configs/satellite-fserve.ovpn
+    dest_config_path: /etc/ovpn/
+    config_name: satellite-fserve.ovpn
+    user: david
+  become: true
+  become_user: root
+  roles:
+    # - pi_setup_vpn
+    - pi_setup_fileserver

@@ -46,6 +46,12 @@
   - chrome-gnome-shell
   - openvpn
   - supervisor
+  - calibre
+  - sshfs
+
+  # Berea VPN
+  - NetworkManager-openconnect-gnome
+  - openconnect
   become: yes
 
 - name: install supervisor dependencies

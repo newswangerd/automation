@@ -1,25 +1,46 @@
 ---
-- name: install nfts drivers
-  package:
-    name: ntfs-3g
-    state: present
+# - name: install nfts drivers
+#   package:
+#     name: ntfs-3g
+#     state: present
 
-- name: set up diretories for hard drives in www root
+- name: set up diretories for hard drives in home directory
   file:
-    path: "/var/www/html/{{ item }}"
+    path: "/mnt/{{ user }}/{{ item }}"
     state: directory
-    owner: www-data
-    group: www-data
-    mode: 444
-    recurse: true
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0700
+    # recurse: true
   with_items:
-    - main
+    - storage
     - backup
+    - internal
 
-- name: mount main hdd
+- name: set up diretories for hard drives in home directory
+  file:
+    path: "/home/{{ user }}/{{ item }}"
+    state: link
+    src: "/mnt/{{ user }}/{{ item }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0700
+  with_items:
+    - storage
+    - backup
+    - internal
+
+- name: mount drives
   mount:
-    path: /var/www/html/main
-    src: UUID=5C84CA2384C9FF8E
-    fstype: ntfs-3g
-    opts: rw,uid=david,gid=david
-    state: present
+    path: "/mnt/{{ user }}/{{ item.dir }}"
+    src: "UUID={{ item.uuid }}"
+    fstype: ntfs
+    state: mounted
+    opts: "uid={{ user }},gid={{ user }},dmask=077,fmask=077"
+  with_items:
+    - uuid: 1012CEC312CEAD52
+      dir: internal
+    - uuid: 5C84CA2384C9FF8E
+      dir: storage
+    - uuid: 2BD0B40C3C3BA106
+      dir: backup
