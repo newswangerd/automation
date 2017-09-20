@@ -1,3 +1,5 @@
 - hosts: localhost
+  vars:
+    user: david
   roles:
     - ubuntu_pc
