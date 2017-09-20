@@ -1,0 +1,6 @@
+- hosts: localhost
+  vars:
+    user: david
+    vpn_config: galaxy.ovpn
+  roles:
+    - fedora_pc

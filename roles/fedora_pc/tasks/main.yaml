@@ -1,0 +1,85 @@
+---
+# gnome extensions
+# https://extensions.gnome.org/extension/307/dash-to-dock/
+# https://extensions.gnome.org/extension/495/topicons/
+
+# - name: download atom rpm
+#   get_url:
+#     url: https://github.com/atom/atom/releases/download/v1.19.5/atom.x86_64.rpm
+#     dest: /tmp/atom.rpm
+#
+# - name: download dropbox rpm
+#   get_url:
+#     url: https://www.dropbox.com/download?dl=packages/fedora/nautilus-dropbox-2015.10.28-1.fedora.x86_64.rpm
+#     dest: /tmp/dropbox.rpm
+#
+# - name: install downloaded rpms
+#   dnf:
+#     name: "/tmp/{{ item }}.rpm"
+#   become: yes
+
+
+
+#   with_items:
+#     - dropbox
+# #     - atom
+# - name: add google chrome repo
+#   yum_repository:
+#     name: chrome
+#     description: Google Chrome Repository
+#     baseurl: http://dl.google.com/linux/chrome/rpm/stable/\$basearch
+#     gpgkey: https://dl-ssl.google.com/linux/linux_signing_key.pub
+#     gpgcheck: yes
+#   become: yes
+
+- name: install neccesary packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - vim
+  - guake
+  - gnome-tweak-tool
+  - libselinux-python
+  - keepassx
+  # - google-chrome-stable
+  - chrome-gnome-shell
+  - openvpn
+  - supervisor
+  become: yes
+
+- name: install supervisor dependencies
+  pip:
+    name: supervisor-stdout
+    state: present
+
+- name: make openvpn config dir
+  file:
+    path: "/home/{{ user }}/.vpn"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0700
+
+- name: copy vpn config
+  template:
+    src: "/home/{{ user }}/code/automation/playbooks/ovpn_configs/{{ vpn_config }}"
+    dest: "/home/{{ user }}/.vpn/"
+  ignore_errors: yes
+
+# - name: setup supervisor config
+#   template:
+#     src: templates/supervisor.conf
+#     dest: /etc/supervisord.conf
+#   become: yes
+
+- name: setup vpn on supverisor
+  template:
+    src: templates/ovpn.conf
+    dest: /etc/supervisord.d/ovpn.ini
+  become: yes
+
+- name: setup git
+  template:
+    src: .gitconfig
+    dest: "{{ ansible_user_dir }}/.gitconfig"

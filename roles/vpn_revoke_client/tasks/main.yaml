@@ -17,11 +17,13 @@
     /etc/openvpn/with_yes.sh easyrsa revoke {{ client }}
   no_log: true
 
-# - name: remove ovpn config and keys
-#   file:
-#     path: "{{ item }}"
-#     state: absent
-#   with_items:
-#     - "{{ ovpn_data }}client_confs/{{ client }}.ovpn"
-#     - "{{ ovpn_data }}pki/private/{{ client }}.key"
-#     - "{{ ovpn_data }}pki/issued/{{ client }}.crt"
+- name: remove ovpn config and keys
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ ovpn_data }}client_confs/{{ client }}.ovpn"
+    - "{{ ovpn_data }}pki/private/{{ client }}.key"
+    - "{{ ovpn_data }}pki/issued/{{ client }}.crt"
+    - "{{ ovpn_data }}ccd/{{ client }}"
+    - "{{ ovpn_data }}pki/reqs/{{ client }}.req"
