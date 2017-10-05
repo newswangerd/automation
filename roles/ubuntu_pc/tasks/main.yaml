@@ -1,10 +1,17 @@
 ---
+- name: add repository keys
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+  become: yes
+
 - name: install PPAs
   apt_repository:
     repo: "{{ item }}"
     state: present
   with_items:
     - 'ppa:webupd8team/atom'
+    - 'deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable'
   become: yes
 
 - name: install neccesary packages
@@ -19,6 +26,34 @@
   - keepassx
   - openvpn
   - supervisor
+  - default-jdk
+
+  # docker stuff
+  - linux-image-extra-{{ ansible_kernel }}
+  - linux-image-extra-virtual
+  - docker-ce
+
+  # Berea VPN
+  - openconnect
+  - network-manager-openconnect-gnome
+  become: yes
+
+- name: create docker group
+  group:
+    name: docker
+    state: present
+
+- name: add my user to docker
+  user:
+    name: "{{ user }}"
+    group: docker
+    append: yes
+  become: yes
+
+- name: start docker
+  service:
+    name: docker
+    state: started
   become: yes
 
 - name: setup git
