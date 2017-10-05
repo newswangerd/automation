@@ -48,6 +48,7 @@
   - supervisor
   - calibre
   - sshfs
+  - python2-virtualenv
 
   # Berea VPN
   - NetworkManager-openconnect-gnome

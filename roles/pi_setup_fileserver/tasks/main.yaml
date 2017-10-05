@@ -3,3 +3,6 @@
 
 - name: set up disks
   include: mount_disks.yaml
+
+- name: set up backup protocols
+  include: backup.yaml
