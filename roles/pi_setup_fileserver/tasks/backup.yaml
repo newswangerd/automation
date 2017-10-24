@@ -1,0 +1,4 @@
+# twice per day: backup storage onto backup drive
+# nightly: backup backup drive to backblaze
+
+# rsync --delete -aP /mnt/david/storage/ /mnt/david/backup

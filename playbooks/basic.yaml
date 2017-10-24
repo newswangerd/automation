@@ -6,7 +6,7 @@
 
   tasks:
   - name: install git
-    apt:
+    package:
       name: git
       state: present
 
@@ -20,5 +20,5 @@
 
   - name: download automation repo
     git:
-      repo: https://github.com/newswangerd/automation.git
+      repo: git@github.com:newswangerd/automation.git
       dest: "{{ home }}/code/automation"

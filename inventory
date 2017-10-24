@@ -1,7 +1,8 @@
 pi-dynamic ansible_host=192.168.1.21 ansible_user=david
 pi-vpn ansible_host=192.168.255.100 ansible_user=david
 pi-initial ansible_host=192.168.1.21 ansible_user=pi ansible_become_pass=raspberry ansible_become_user=root
-training ansible_host=10.40.42.157 ansible_user=newswangerd
+fs-local ansible_host=192.168.2.99 ansible_user=david
+fs-vpn ansible_host=192.168.255.100 ansible_user=david
 
 [vpn]
 davidn.io ansible_user=root
