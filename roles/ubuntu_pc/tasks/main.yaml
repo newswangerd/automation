@@ -12,6 +12,7 @@
   with_items:
     - 'ppa:webupd8team/atom'
     - 'deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable'
+    - 'ppa:doctormo/wacom-plus'
   become: yes
 
 - name: install neccesary packages
@@ -27,11 +28,16 @@
   - openvpn
   - supervisor
   - default-jdk
+  - python-pip
+  - virtualenv
+  - wacom-dkms
+  - rkhunter
 
   # docker stuff
   - linux-image-extra-{{ ansible_kernel }}
   - linux-image-extra-virtual
   - docker-ce
+  - docker-compose
 
   # Berea VPN
   - openconnect
