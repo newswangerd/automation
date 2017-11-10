@@ -1,78 +1,20 @@
 ---
-- name: add repository keys
-  apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
-    state: present
-  become: yes
+- name: basic setup
+  include: basic.yaml
+  tags:
+    - basic
 
-- name: install PPAs
-  apt_repository:
-    repo: "{{ item }}"
-    state: present
-  with_items:
-    - 'ppa:webupd8team/atom'
-    - 'deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable'
-    - 'ppa:doctormo/wacom-plus'
-  become: yes
+- name: docker setup
+  include: docker.yaml
+  tags:
+    - docker
 
-- name: install neccesary packages
-  apt:
-    name: "{{ item }}"
-    state: present
-  with_items:
-  - vim
-  - atom
-  - guake
-  - fish
-  - keepassx
-  - openvpn
-  - supervisor
-  - default-jdk
-  - python-pip
-  - virtualenv
-  - wacom-dkms
-  - rkhunter
+- name: vagrant setup
+  include: vagrant.yaml
+  tags:
+    - vagrant
 
-  # docker stuff
-  - linux-image-extra-{{ ansible_kernel }}
-  - linux-image-extra-virtual
-  - docker-ce
-  - docker-compose
-
-  # Berea VPN
-  - openconnect
-  - network-manager-openconnect-gnome
-  become: yes
-
-- name: create docker group
-  group:
-    name: docker
-    state: present
-
-- name: add my user to docker
-  user:
-    name: "{{ user }}"
-    group: docker
-    append: yes
-  become: yes
-
-- name: start docker
-  service:
-    name: docker
-    state: started
-  become: yes
-
-- name: setup git
-  template:
-    src: .gitconfig
-    dest: "{{ ansible_user_dir }}/.gitconfig"
-
-- name: remove amazon crap
-  file:
-    path: "{{ item }}"
-    state: absent
-  with_items:
-    - /usr/share/applications/ubuntu-amazon-default.desktop
-    - /usr/share/unity-webapps/userscripts/unity-webapps-amazon/Amazon.user.js
-    - /usr/share/unity-webapps/userscripts/unity-webapps-amazon/manifest.json
-  become: yes
+- name: go setup
+  include: go.yaml
+  tags:
+    - go

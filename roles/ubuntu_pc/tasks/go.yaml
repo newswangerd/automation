@@ -1,0 +1,24 @@
+---
+- name: install go
+  apt:
+    name: golang-go
+    state: present
+  become: yes
+
+- name: create gopath
+  file:
+    path: "/home/{{ user}}/code/go/{{ item }}"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+  with_items:
+    # - "src"
+    - "bin"
+    - "pkg"
+    - "src/github.com/newswangerd"
+
+- name: set up GOPATH variable
+  lineinfile:
+    path: "/home/{{ user }}/.bashrc"
+    line: export GOPATH=$HOME/code/go
+    state: present
