@@ -27,11 +27,17 @@
   - openvpn
   - supervisor
   - default-jdk
+  - touchegg
+  - virtualenv
+  - traceroute
+  - nmap
+  - virtualenv
 
   # docker stuff
   - linux-image-extra-{{ ansible_kernel }}
   - linux-image-extra-virtual
   - docker-ce
+  - docker-compose
 
   # Berea VPN
   - openconnect

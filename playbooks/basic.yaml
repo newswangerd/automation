@@ -9,6 +9,7 @@
     package:
       name: git
       state: present
+    become: yes
 
   - name: create code file
     file:
@@ -20,5 +21,11 @@
 
   - name: download automation repo
     git:
-      repo: git@github.com:newswangerd/automation.git
+      repo: https://github.com/newswangerd/automation.git
       dest: "{{ home }}/code/automation"
+
+  - name: configure git repo to use ssh
+    lineinfile:
+      path: "{{ home }}/code/automation/.git/config"
+      regexp: '^	url = https://github.com/newswangerd/automation.git'
+      line: '	url = git@github.com:newswangerd/automation.git'
