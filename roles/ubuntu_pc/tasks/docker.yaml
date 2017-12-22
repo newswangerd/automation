@@ -1,0 +1,45 @@
+---
+- name: add repository keys
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+  become: yes
+
+- name: install PPAs
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  with_items:
+    - 'deb [arch=amd64] https://download.docker.com/linux/ubuntu zesty stable'
+
+- name: install neccesary packages
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  # docker stuff
+  - linux-image-extra-{{ ansible_kernel }}
+  - linux-image-extra-virtual
+  - docker-ce
+  - docker-compose
+
+  become: yes
+
+- name: create docker group
+  group:
+    name: docker
+    state: present
+
+- name: add my user to docker
+  user:
+    name: "{{ user }}"
+    group: docker
+    append: yes
+  become: yes
+
+- name: start docker
+  service:
+    name: docker
+    state: started
+    enabled: yes
+  become: yes
