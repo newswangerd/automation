@@ -1,3 +1,5 @@
+# FOR USE ON UBUNTU
+
 - name: install unzip
   package:
     name: unzip
@@ -23,6 +25,13 @@
     src: http://ftb.cursecdn.com/FTB2/modpacks/FTBPresentsSkyfactory3/{{ skyfactory_version }}/FTBPresentsSkyfactory3Server.zip
     dest: /opt/mc/
     remote_src: yes
+
+- name: get name of jar file for FTBserver
+  shell: 'ls /opt/mc | grep FTBserver'
+  register: servername
+
+- set_fact:
+    forge_jar: '{{servername.stdout}}'
 
 - name: make FTB installer executable
   file:

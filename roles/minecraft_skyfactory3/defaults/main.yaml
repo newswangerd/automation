@@ -1,7 +1,7 @@
 ---
 mc_version: "1.10.2"
 forge_jar: "FTBserver-1.10.2-12.18.3.2316.jar"
-skyfactory_version: "3_0_13"
+skyfactory_version: "3_0_15"
 min_ram: "512M"
 max_ram: "3500M"
 java_params: "-XX:+UseParNewGC -XX:+CMSIncrementalPacing -XX:+CMSClassUnloadingEnabled -XX:ParallelGCThreads=2 -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10"
